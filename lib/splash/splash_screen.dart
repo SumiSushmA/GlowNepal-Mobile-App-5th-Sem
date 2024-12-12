@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // For Timer
+import 'dart:async';
+
+import 'package:glownepal_mobile_app_5th_sem/onboarding/onboarding_screen.dart'; // For Timer
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,12 +15,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // Set a timer for 6 seconds to navigate to the next screen
     Timer(const Duration(seconds: 6), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const NextScreen(),
+          builder: (context) => const OnboardingScreen(),
         ),
       );
     });

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen.dart';
+import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen_view.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: const SplashScreen(),
+      home: const SplashScreenView(),
     );
   }
 }

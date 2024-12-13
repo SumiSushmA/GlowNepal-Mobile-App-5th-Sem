@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:glownepal_mobile_app_5th_sem/login/login_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/onboarding/onboarding_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen_view.dart';
 
 class App extends StatelessWidget {
@@ -12,7 +14,13 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: const SplashScreenView(),
+      initialRoute: '/', // Start with the SplashScreenView
+      routes: {
+        '/': (context) => const SplashScreenView(), // Splash screen route
+        '/onboarding': (context) =>
+            const OnboardingScreenView(), // Onboarding route
+        '/login': (context) => const LoginScreen(), // Login route
+      },
     );
   }
 }

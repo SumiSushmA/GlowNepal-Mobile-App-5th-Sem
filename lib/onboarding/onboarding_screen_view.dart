@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Login/login_screen_view.dart';
+
 class OnboardingScreenView extends StatefulWidget {
   const OnboardingScreenView({super.key});
 
@@ -31,13 +33,17 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
     },
   ];
 
-  void _goToHome() {
-    Navigator.pushReplacementNamed(
-        context, '/start screen'); // Navigate to the home page
+  void _goToLoginScreen() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const LoginScreen()), // Navigate to LoginScreen
+    );
   }
 
   void _skipToLastPage() {
-    _controller.jumpToPage(2); // Jump directly to the third page (index 2)
+    _controller.jumpToPage(
+        _onboardingData.length - 1); // Jump directly to the last page
   }
 
   void _goBack() {
@@ -181,7 +187,7 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                 TextButton(
                   onPressed: () {
                     if (_currentIndex == _onboardingData.length - 1) {
-                      _goToHome(); // On the last page, navigate to home
+                      _goToLoginScreen(); // On the last page, navigate to LoginScreen
                     } else {
                       _controller.nextPage(
                         duration: const Duration(milliseconds: 300),

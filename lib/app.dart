@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glownepal_mobile_app_5th_sem/Login/login_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/onboarding/onboarding_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/register/register_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen_view.dart';
 
 class App extends StatelessWidget {
@@ -20,6 +21,8 @@ class App extends StatelessWidget {
         '/onboarding': (context) =>
             const OnboardingScreenView(), // Onboarding route
         '/login': (context) => const LoginScreen(), // Login route
+        '/register': (context) =>
+            const RegisterScreenView(), //register screen route
       },
     );
   }

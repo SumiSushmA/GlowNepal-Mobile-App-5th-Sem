@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glownepal_mobile_app_5th_sem/Login/login_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/home%20screen/home_screen.dart';
 import 'package:glownepal_mobile_app_5th_sem/onboarding/onboarding_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/register/register_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen_view.dart';
@@ -23,6 +24,7 @@ class App extends StatelessWidget {
         '/login': (context) => const LoginScreen(), // Login route
         '/register': (context) =>
             const RegisterScreenView(), //register screen route
+        '/homescreen': (context) => const HomeScreen(), //home screen route
       },
     );
   }

@@ -85,22 +85,22 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                   }),
                   const SizedBox(height: 16),
 
-                  // Sign Up Button
-                  ElevatedButton(
-                    onPressed: () {
-                      print("Sign Up Clicked");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFBACDFF),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  // Sign Up Button (Purple button with matching width)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width -
+                        48, // Match text field width
+                    child: ElevatedButton(
+                      onPressed: _register,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      child: const Text(
+                        'Register',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
@@ -163,6 +163,11 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
         ],
       ),
     );
+  }
+
+  void _register() {
+    // Add your registration logic here
+    print("Register button clicked");
   }
 
   // Helper method for text fields

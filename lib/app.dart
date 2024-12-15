@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/login/login_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/Login/login_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/onboarding/onboarding_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen_view.dart';
 

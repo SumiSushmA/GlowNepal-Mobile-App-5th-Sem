@@ -11,6 +11,46 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
+  // Controllers for input fields
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  void _register() {
+    String name = _nameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
+
+    if (name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      _showMessage('Please fill in all the fields.');
+      return;
+    }
+
+    if (password != confirmPassword) {
+      _showMessage('Passwords do not match.');
+      return;
+    }
+
+    // All validations passed
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,11 +101,11 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                   const SizedBox(height: 32),
 
                   // Full Name Field
-                  _buildTextField('Full Name', false),
+                  _buildTextField('Full Name', false, _nameController),
                   const SizedBox(height: 16),
 
                   // Email Field
-                  _buildTextField('Email', false),
+                  _buildTextField('Email', false, _emailController),
                   const SizedBox(height: 16),
 
                   // Password Field
@@ -73,7 +113,7 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                     setState(() {
                       _isPasswordVisible = value;
                     });
-                  }),
+                  }, _passwordController),
                   const SizedBox(height: 16),
 
                   // Confirm Password Field
@@ -82,13 +122,12 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                     setState(() {
                       _isConfirmPasswordVisible = value;
                     });
-                  }),
+                  }, _confirmPasswordController),
                   const SizedBox(height: 16),
 
-                  // Sign Up Button (Purple button with matching width)
+                  // Sign Up Button
                   SizedBox(
-                    width: MediaQuery.of(context).size.width -
-                        48, // Match text field width
+                    width: MediaQuery.of(context).size.width - 48,
                     child: ElevatedButton(
                       onPressed: _register,
                       style: ElevatedButton.styleFrom(
@@ -137,8 +176,7 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                   // Login Navigation
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context,
-                          '/login'); // Ensure '/login' is registered in your routes
+                      Navigator.pushNamed(context, '/login');
                     },
                     child: const Text.rich(
                       TextSpan(
@@ -165,16 +203,13 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
     );
   }
 
-  void _register() {
-    // Add your registration logic here
-    print("Register button clicked");
-  }
-
   // Helper method for text fields
-  Widget _buildTextField(String label, bool obscureText) {
+  Widget _buildTextField(
+      String label, bool obscureText, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextField(
+        controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
           labelText: label,
@@ -188,12 +223,16 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
     );
   }
 
-  // Helper method for password fields with visibility toggle
+  // Helper method for password fields
   Widget _buildPasswordField(
-      String label, bool isVisible, ValueChanged<bool> onVisibilityChanged) {
+      String label,
+      bool isVisible,
+      ValueChanged<bool> onVisibilityChanged,
+      TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextField(
+        controller: controller,
         obscureText: !isVisible,
         decoration: InputDecoration(
           labelText: label,
@@ -219,10 +258,10 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
       onTap: onTap,
       child: CircleAvatar(
         backgroundColor: Colors.white,
-        radius: 25, // Slightly larger button size
+        radius: 25,
         child: Image.asset(
           assetPath,
-          width: 30, // Larger logo size
+          width: 30,
           height: 30,
           fit: BoxFit.contain,
         ),

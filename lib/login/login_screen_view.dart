@@ -35,24 +35,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true; // Toggle to control password visibility
-  String? _errorMessage;
 
   void _login() {
     final email = _emailController.text;
     final password = _passwordController.text;
 
     if (email == 'susma@gmail.com' && password == 'sushma') {
-      setState(() {
-        _errorMessage = null;
-      });
+      // If login is successful, navigate to home
+      Navigator.pushReplacementNamed(context, '/home');
       print('Login successful');
-      Navigator.pushReplacementNamed(context, '/home'); // Navigate to Home
     } else {
-      setState(() {
-        _errorMessage = 'Incorrect email or password';
-      });
-      print('Login failed: Incorrect email or password');
+      // If login fails, show the error message in a SnackBar
+      _showErrorMessage('Incorrect email or password');
     }
+  }
+
+  // Method to show error message as SnackBar
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -155,13 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: 16),
-                  Text(
-                    _errorMessage!,
-                    style: const TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                ],
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {},

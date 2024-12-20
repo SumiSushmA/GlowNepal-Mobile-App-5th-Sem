@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glownepal_mobile_app_5th_sem/home%20screen/about_us_screen_view.dart';
 
 import 'profile_screen.dart';
 
@@ -15,8 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const Center(child: Text('Home Screen', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Stylish Screen', style: TextStyle(fontSize: 24))),
-    const Center(
-        child: Text('About Us Screen', style: TextStyle(fontSize: 24))),
+    const AboutUsScreenView(),
     const ProfileScreen(),
   ];
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/home%20screen/stylish_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/home%20screen/see_all_stylish_view.dart';
+
+import 'stylish_screen_view.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
@@ -71,7 +73,23 @@ class HomePageView extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Beauty Specialists
-            _buildSectionTitle('Beauty Specialist', () {}),
+            _buildSectionTitle('Beauty Specialist', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SeeAllStylishView(
+                    specialists: [
+                      Specialist('Sumi', 'Hair Specialist', 4.0,
+                          'assets/images/stylish 1.jpg'),
+                      Specialist('Nitika', 'Nail Stylist', 5.0,
+                          'assets/images/stylish 2.jpg'),
+                      Specialist('Sushmita', 'Makeup Artist', 4.5,
+                          'assets/images/stylish 3.jpg'),
+                    ],
+                  ),
+                ),
+              );
+            }),
 
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,

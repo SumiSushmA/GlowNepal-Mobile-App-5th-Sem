@@ -110,9 +110,7 @@ class StylishScreenView extends StatelessWidget {
               // Book Appointment Button
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Add your booking functionality here
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 12),

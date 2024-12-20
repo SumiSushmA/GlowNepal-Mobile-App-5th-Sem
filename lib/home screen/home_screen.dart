@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:glownepal_mobile_app_5th_sem/home%20screen/about_us_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/home%20screen/home_page_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/home%20screen/profile_screen.dart';
+import 'package:glownepal_mobile_app_5th_sem/home%20screen/see_all_stylish_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,9 +14,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
+  final List<Specialist> specialists = [
+    Specialist('Sumi', 'Hair Specialist', 4.0, 'assets/images/stylish1.jpg'),
+    Specialist('Nitika', 'Nail Stylish', 4.5, 'assets/images/stylish2.jpg'),
+    Specialist('Susmita', 'Makeup Artist', 4.2, 'assets/images/stylish3.jpg'),
+  ];
+
+  late final List<Widget> _screens = [
     const HomePageView(),
-    const Center(child: Text('Stylish Screen', style: TextStyle(fontSize: 24))),
+    SeeAllStylishView(specialists: specialists),
     const AboutUsScreenView(),
     const ProfileScreen(),
   ];

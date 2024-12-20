@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glownepal_mobile_app_5th_sem/home%20screen/stylish_screen_view.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
@@ -30,7 +31,7 @@ class HomePageView extends StatelessWidget {
                 ),
                 const CircleAvatar(
                   backgroundImage:
-                      AssetImage('assets/images/profile image.png'),
+                      AssetImage('assets/images/profile_image.png'),
                   radius: 24,
                 ),
               ],
@@ -76,12 +77,12 @@ class HomePageView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildSpecialistCard('Sumi', 'Hair Specialist', 4.0,
+                  _buildSpecialistCard(context, 'Sumi', 'Hair Specialist', 4.0,
                       'assets/images/stylish 1.jpg'),
-                  _buildSpecialistCard('Nitika', 'Nail Stylist', 5.0,
+                  _buildSpecialistCard(context, 'Nitika', 'Nail Stylist', 5.0,
                       'assets/images/stylish 2.jpg'),
-                  _buildSpecialistCard('Sushmita', 'Makeup Artist', 4.5,
-                      'assets/images/stylish 3.jpg'),
+                  _buildSpecialistCard(context, 'Sushmita', 'Makeup Artist',
+                      4.5, 'assets/images/stylish 3.jpg'),
                 ],
               ),
             ),
@@ -143,26 +144,41 @@ class HomePageView extends StatelessWidget {
     );
   }
 
-  Widget _buildSpecialistCard(
-      String name, String role, double rating, String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(
-        children: [
-          CircleAvatar(
-            backgroundImage: AssetImage(imagePath),
-            radius: 40,
+  Widget _buildSpecialistCard(BuildContext context, String name, String role,
+      double rating, String imagePath) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StylishScreenView(
+              name: name,
+              role: role,
+              rating: rating,
+              imagePath: imagePath,
+            ),
           ),
-          const SizedBox(height: 8),
-          Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(role),
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellow[700], size: 16),
-              Text('$rating'),
-            ],
-          ),
-        ],
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          children: [
+            CircleAvatar(
+              backgroundImage: AssetImage(imagePath),
+              radius: 40,
+            ),
+            const SizedBox(height: 8),
+            Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(role),
+            Row(
+              children: [
+                Icon(Icons.star, color: Colors.yellow[700], size: 16),
+                Text('$rating'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

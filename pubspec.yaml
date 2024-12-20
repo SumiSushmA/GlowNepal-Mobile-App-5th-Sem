@@ -30,11 +30,27 @@ flutter:
     - assets/logos/
     - assets/images/
     - assets/icons/
-    - assets/fonts/
+
+  
+  fonts:
+    - family: Montserrat Bold
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          # style: italic
+
+    - family: Montserrat Italic
+      fonts:
+        - asset: assets/fonts/Montserrat-Italic.ttf
+          
+    
+    - family: Montserrat Regular
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+
 
 flutter_native_splash:
-  color: "#ffffff" # Background color
-  image: assets/logos/glow-nepal-splash-logo.png # Path to your logo
+  color: "#ffffff" 
+  image: assets/logos/glow-nepal-splash-logo.png 
   android: true
   ios: true
   fullscreen: true

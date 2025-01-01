@@ -1,28 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/home%20screen/home_screen.dart';
-import 'package:glownepal_mobile_app_5th_sem/register/register_screen_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreenView(),
-        '/home': (context) => HomeScreen(),
-      },
-    );
-  }
-}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -163,7 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/forget-password');
+                  },
                   child: const Text('Forgot Password'),
                 ),
                 const SizedBox(height: 24),

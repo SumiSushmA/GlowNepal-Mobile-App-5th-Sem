@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/Login/login_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/forgot%20password/forget_password_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/forgot%20password/reset_password_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/forgot%20password/verification_code_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/home%20screen/home_screen.dart';
+import 'package:glownepal_mobile_app_5th_sem/login/login_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/onboarding/onboarding_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/register/register_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/splash/splash_screen_view.dart';
@@ -25,6 +28,9 @@ class App extends StatelessWidget {
         '/register': (context) =>
             const RegisterScreenView(), //register screen route
         '/home': (context) => HomeScreen(), //home screen route
+        '/forget-password': (context) => ForgetPasswordScreenView(),
+        '/verification': (context) => VerificationCodeScreenView(),
+        '/reset-password': (context) => ResetPasswordScreenView(),
       },
     );
   }

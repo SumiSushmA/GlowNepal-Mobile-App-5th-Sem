@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/home%20screen/stylish_screen_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/stylish_screen_view.dart';
 
 class SeeAllStylishView extends StatelessWidget {
   final List<Specialist> specialists;

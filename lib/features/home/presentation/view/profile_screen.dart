@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/home%20screen/home_screen.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/home_view.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

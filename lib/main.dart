@@ -16,9 +16,8 @@
 // }
 
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
+
 import 'app.dart';
-=======
 import 'package:glownepal_mobile_app_5th_sem/app/app.dart';
 import 'package:glownepal_mobile_app_5th_sem/app/di/di.dart';
 import 'package:glownepal_mobile_app_5th_sem/core/network/hive_service.dart';
@@ -32,7 +31,6 @@ void main() async {
 
   // Initialize Dependencies
   await initDependencies();
->>>>>>> Stashed changes
 
   runApp(const App());
 }

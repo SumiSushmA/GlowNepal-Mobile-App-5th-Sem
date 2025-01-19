@@ -1,13 +1,7 @@
 import 'package:glownepal_mobile_app_5th_sem/core/network/hive_service.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/user_signup_data_source.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_signup_hive_model.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/entity/user_signup_entity.dart';
-
-abstract class IUserSignupDataSource {
-  Future<void> createUser(UserSignupEntity userEntity);
-  Future<UserSignupEntity?> getUserByEmail(String email);
-  Future<bool> isEmailRegistered(String email);
-  Future<void> deleteUser(String email);
-}
 
 class UserSignupLocalDatasource implements IUserSignupDataSource {
   final HiveService hiveService;

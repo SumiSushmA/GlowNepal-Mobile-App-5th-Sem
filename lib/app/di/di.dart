@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:glownepal_mobile_app_5th_sem/core/network/hive_service.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/local_datasource/user_login_local_datasource.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/user_login_data_source.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_login_hive_model.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_signup_hive_model.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/repository/user_login_data_repository.dart';

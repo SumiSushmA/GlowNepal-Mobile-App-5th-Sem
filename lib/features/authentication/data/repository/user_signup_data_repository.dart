@@ -1,4 +1,4 @@
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/local_datasource/user_signup_local_datasource.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/user_signup_data_source.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/entity/user_signup_entity.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/repository/user_signup_domain_repository.dart';
 

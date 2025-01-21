@@ -31,10 +31,10 @@ class IsEmailRegisteredUseCase {
   }
 }
 
-class DeleteUserUsecase {
+class DeleteUserUseCase {
   final UserSignupDomainRepository repository;
 
-  DeleteUserUsecase(this.repository);
+  DeleteUserUseCase(this.repository);
 
   Future<void> call(String email) async {
     await repository.deleteUser(email);

@@ -10,39 +10,23 @@ class UserSignupLocalDatasource implements IUserSignupDataSource {
 
   @override
   Future<void> createUser(UserSignupEntity userEntity) async {
-    try {
-      final userHiveModel = UserSignupHiveModel.fromEntity(userEntity);
-      await hiveService.addSignupUser(userHiveModel);
-    } catch (e) {
-      throw Exception('Error creating user: $e');
-    }
+    final userHiveModel = UserSignupHiveModel.fromEntity(userEntity);
+    await hiveService.addSignupUser(userHiveModel);
   }
 
   @override
   Future<UserSignupEntity?> getUserByEmail(String email) async {
-    try {
-      final userHiveModel = await hiveService.getSignupUser(email);
-      return userHiveModel?.toEntity();
-    } catch (e) {
-      throw Exception('Error retrieving user: $e');
-    }
+    final userHiveModel = await hiveService.getSignupUser(email);
+    return userHiveModel?.toEntity();
   }
 
   @override
   Future<bool> isEmailRegistered(String email) async {
-    try {
-      return await hiveService.isEmailRegistered(email);
-    } catch (e) {
-      throw Exception('Error checking email registration: $e');
-    }
+    return await hiveService.isEmailRegistered(email);
   }
 
   @override
   Future<void> deleteUser(String email) async {
-    try {
-      await hiveService.deleteSignupUser(email);
-    } catch (e) {
-      throw Exception('Error deleting user: $e');
-    }
+    await hiveService.deleteSignupUser(email);
   }
 }

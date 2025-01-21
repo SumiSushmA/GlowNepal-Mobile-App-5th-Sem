@@ -4,7 +4,7 @@ import '../../domain/entity/user_signup_entity.dart';
 
 part 'user_signup_hive_model.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 1)
 class UserSignupHiveModel {
   @HiveField(0)
   final String name;

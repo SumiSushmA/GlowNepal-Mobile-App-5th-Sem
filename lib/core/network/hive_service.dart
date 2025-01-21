@@ -3,25 +3,13 @@ import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
-  late Box<UserLoginHiveModel> userLoginBox;
-  late Box<UserSignupHiveModel> userSignupBox;
+  final Box<UserLoginHiveModel> userLoginBox;
+  final Box<UserSignupHiveModel> userSignupBox;
 
-  Future<void> init() async {
-    // Initialize Hive
-    await Hive.initFlutter();
-
-    // Register Hive Adapters
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(UserLoginHiveModelAdapter());
-    }
-    if (!Hive.isAdapterRegistered(1)) {
-      Hive.registerAdapter(UserSignupHiveModelAdapter());
-    }
-
-    // Open Hive Boxes
-    userLoginBox = await Hive.openBox<UserLoginHiveModel>('userLoginBox');
-    userSignupBox = await Hive.openBox<UserSignupHiveModel>('userSignupBox');
-  }
+  HiveService({
+    required this.userLoginBox,
+    required this.userSignupBox,
+  });
 
   // For Login Users
   Future<void> addLoginUser(UserLoginHiveModel user) async {

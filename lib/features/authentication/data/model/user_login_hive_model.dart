@@ -4,7 +4,7 @@ import '../../domain/entity/user_login_entity.dart';
 
 part 'user_login_hive_model.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 0)
 class UserLoginHiveModel {
   @HiveField(0)
   final String email;

@@ -60,7 +60,6 @@ class OnboardingScreenView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Back Button
                       if (state.currentIndex > 0)
                         IconButton(
                           icon:
@@ -72,15 +71,11 @@ class OnboardingScreenView extends StatelessWidget {
                         )
                       else
                         const SizedBox(width: 48),
-
-                      // Logo
                       Image.asset(
                         'assets/logos/glow-nepal-splash-logo.png',
                         width: 100,
                         height: 100,
                       ),
-
-                      // Skip Button
                       TextButton(
                         onPressed: () =>
                             cubit.skipToLastPage(onboardingData.length),
@@ -142,7 +137,6 @@ class OnboardingScreenView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Dots Indicator
                       Row(
                         children: List.generate(
                           onboardingData.length,
@@ -159,7 +153,6 @@ class OnboardingScreenView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Next/Get Started Button
                       TextButton(
                         onPressed: state.isLastPage
                             ? () => cubit.navigateToLogin(context)

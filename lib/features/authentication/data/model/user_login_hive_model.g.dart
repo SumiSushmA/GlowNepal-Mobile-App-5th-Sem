@@ -8,7 +8,7 @@ part of 'user_login_hive_model.dart';
 
 class UserLoginHiveModelAdapter extends TypeAdapter<UserLoginHiveModel> {
   @override
-  final int typeId = 1;
+  final int typeId = 0;
 
   @override
   UserLoginHiveModel read(BinaryReader reader) {

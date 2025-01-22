@@ -8,7 +8,7 @@ part of 'user_signup_hive_model.dart';
 
 class UserSignupHiveModelAdapter extends TypeAdapter<UserSignupHiveModel> {
   @override
-  final int typeId = 2;
+  final int typeId = 1;
 
   @override
   UserSignupHiveModel read(BinaryReader reader) {
@@ -21,13 +21,15 @@ class UserSignupHiveModelAdapter extends TypeAdapter<UserSignupHiveModel> {
       email: fields[1] as String,
       password: fields[2] as String,
       profileImagePath: fields[3] as String,
+      phone: fields[4] as String,
+      gender: fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserSignupHiveModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -35,7 +37,11 @@ class UserSignupHiveModelAdapter extends TypeAdapter<UserSignupHiveModel> {
       ..writeByte(2)
       ..write(obj.password)
       ..writeByte(3)
-      ..write(obj.profileImagePath);
+      ..write(obj.profileImagePath)
+      ..writeByte(4)
+      ..write(obj.phone)
+      ..writeByte(5)
+      ..write(obj.gender);
   }
 
   @override

@@ -1,6 +1,5 @@
-import 'package:hive/hive.dart';
-
-import '../../domain/entity/user_signup_entity.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/entity/user_signup_entity.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 part 'user_signup_hive_model.g.dart';
 
@@ -18,11 +17,19 @@ class UserSignupHiveModel {
   @HiveField(3)
   final String profileImagePath;
 
+  @HiveField(4)
+  final String phone;
+
+  @HiveField(5)
+  final String gender;
+
   UserSignupHiveModel({
     required this.name,
     required this.email,
     required this.password,
     required this.profileImagePath,
+    required this.phone,
+    required this.gender,
   });
 
   factory UserSignupHiveModel.fromEntity(UserSignupEntity entity) {
@@ -31,6 +38,8 @@ class UserSignupHiveModel {
       email: entity.email,
       password: entity.password,
       profileImagePath: entity.profileImagePath,
+      phone: entity.phone,
+      gender: entity.gender,
     );
   }
 
@@ -40,6 +49,8 @@ class UserSignupHiveModel {
       email: email,
       password: password,
       profileImagePath: profileImagePath,
+      phone: phone,
+      gender: gender,
     );
   }
 }

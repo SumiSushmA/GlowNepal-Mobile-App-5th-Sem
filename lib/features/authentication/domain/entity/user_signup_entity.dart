@@ -3,11 +3,15 @@ class UserSignupEntity {
   final String email;
   final String password;
   final String profileImagePath;
+  final String phone;
+  final String gender;
 
   UserSignupEntity({
     required this.name,
     required this.email,
     required this.password,
     required this.profileImagePath,
+    required this.phone,
+    required this.gender,
   });
 }

@@ -6,7 +6,7 @@ import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/reposi
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/use_case/signup/user_signup_usecases.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view/signup/user_signup_screen_view.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view_model/signup/user_signup_bloc.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/home_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/bottom_nav/home_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class UserLoginScreenView extends StatefulWidget {

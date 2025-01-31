@@ -7,3 +7,29 @@ class SignupUserEvent extends UserSignupEvent {
 
   SignupUserEvent(this.userEntity);
 }
+// part of 'user_signup_bloc.dart';
+
+// abstract class UserSignupEvent extends Equatable {
+//   @override
+//   List<Object?> get props => [];
+// }
+
+// /// **🚀 Event for User Signup**
+// class SignupUserEvent extends UserSignupEvent {
+//   final UserSignupEntity userEntity;
+
+//   SignupUserEvent(this.userEntity);
+
+//   @override
+//   List<Object?> get props => [userEntity];
+// }
+
+// /// **📷 Event for Image Upload**
+// class UploadImageEvent extends UserSignupEvent {
+//   final File file;
+
+//   UploadImageEvent(this.file);
+
+//   @override
+//   List<Object?> get props => [file];
+// }

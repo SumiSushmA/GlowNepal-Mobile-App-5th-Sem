@@ -7,6 +7,7 @@ import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentatio
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view_model/signup/user_signup_event.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view_model/signup/user_signup_state.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UserSignupScreenView extends StatefulWidget {
   const UserSignupScreenView({super.key});
@@ -26,10 +27,29 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
   String? _selectedGender;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-
   final ImagePicker _imagePicker = ImagePicker();
 
-  void _pickImage(ImageSource source) async {
+  /// **📷 Check Camera & Gallery Permissions**
+  Future<void> _checkPermission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.photos,
+      Permission.storage,
+    ].request();
+
+    if (statuses[Permission.camera]!.isDenied ||
+        statuses[Permission.photos]!.isDenied ||
+        statuses[Permission.storage]!.isDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Permission denied')),
+      );
+    }
+  }
+
+  /// **📷 Pick Image from Camera/Gallery**
+  Future<void> _pickImage(ImageSource source) async {
+    await _checkPermission();
+
     try {
       final pickedImage = await _imagePicker.pickImage(source: source);
       if (pickedImage != null) {
@@ -45,6 +65,7 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
     Navigator.pop(context);
   }
 
+  /// **🚀 Register User**
   void _register() {
     if (!_formKey.currentState!.validate()) return;
 
@@ -68,13 +89,14 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       profileImagePath: _profileImage!.path,
-      phone: _phoneController.text.trim(),
+      phone: '+977 ${_phoneController.text.trim()}',
       gender: _selectedGender!,
     );
 
     context.read<UserSignupBloc>().add(SignupUserEvent(userEntity));
   }
 
+  /// **🔔 Show Error Message**
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
@@ -94,7 +116,7 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
-            Navigator.pop(context);
+            Navigator.pop(context); // ✅ Navigate back to login after success
           } else if (state is SignupErrorState) {
             _showMessage(state.message);
           }
@@ -108,6 +130,8 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
+
+                    /// **📷 Profile Image Upload**
                     GestureDetector(
                       onTap: () {
                         showModalBottomSheet(
@@ -143,40 +167,31 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                       ),
                     ),
                     const SizedBox(height: 20),
+
+                    /// **👤 Full Name**
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(
                         labelText: 'Full Name',
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your full name';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 16),
+
+                    /// **📧 Email**
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Email',
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return 'Please enter a valid email address';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 16),
+
+                    /// **📞 Phone Number (Always Starts with +977)**
                     TextFormField(
                       controller: _phoneController,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         labelText: 'Phone Number',
                         border: OutlineInputBorder(),
@@ -184,43 +199,38 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your phone number';
+                          return 'Enter a valid 10-digit phone number';
                         }
-                        String cleanedValue =
-                            value.replaceAll(RegExp(r'[^0-9]'), '');
-                        if (cleanedValue.length != 10) {
-                          return 'Please enter a valid 10-digit number';
+                        if (value.length != 10) {
+                          return 'Phone number must be 10 digits';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
+
+                    /// **⚤ Gender Dropdown**
                     DropdownButtonFormField<String>(
                       value: _selectedGender,
                       decoration: const InputDecoration(
                         labelText: 'Gender',
                         border: OutlineInputBorder(),
                       ),
-                      items: const [
-                        DropdownMenuItem(
-                            value: 'Female', child: Text('Female')),
-                        DropdownMenuItem(value: 'Male', child: Text('Male')),
-                        DropdownMenuItem(
-                            value: 'Others', child: Text('Others')),
-                      ],
+                      items: ['Male', 'Female', 'Other']
+                          .map((gender) => DropdownMenuItem(
+                                value: gender,
+                                child: Text(gender),
+                              ))
+                          .toList(),
                       onChanged: (value) {
                         setState(() {
                           _selectedGender = value;
                         });
                       },
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please select a gender';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 16),
+
+                    /// **🔒 Password**
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
@@ -230,8 +240,8 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
@@ -240,17 +250,10 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                           },
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters long';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 16),
+
+                    /// **🔒 Confirm Password**
                     TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: _obscureConfirmPassword,
@@ -260,8 +263,8 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureConfirmPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
@@ -271,14 +274,10 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                           },
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please confirm your password';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 20),
+
+                    /// **🚀 Register Button**
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -286,8 +285,6 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.purple,
                           padding: const EdgeInsets.symmetric(vertical: 18),
-                          minimumSize:
-                              Size(MediaQuery.of(context).size.width, 60),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -299,14 +296,15 @@ class _UserSignupScreenViewState extends State<UserSignupScreenView> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Column(
+
+                    /// **🔄 Already Have an Account? Login**
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Already have an account?',
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                        TextButton(
-                          onPressed: () {
+                        const Text('Already have an account? ',
+                            style: TextStyle(color: Colors.black54)),
+                        GestureDetector(
+                          onTap: () {
                             Navigator.pop(context);
                           },
                           child: const Text(

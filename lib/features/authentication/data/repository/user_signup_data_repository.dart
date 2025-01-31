@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dartz/dartz.dart';
+import 'package:glownepal_mobile_app_5th_sem/core/error/failure.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/user_signup_data_source.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/entity/user_signup_entity.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/repository/user_signup_domain_repository.dart';
@@ -25,5 +29,11 @@ class UserSignupDataRepositoryImpl implements UserSignupDomainRepository {
   @override
   Future<void> deleteUser(String email) async {
     await dataSource.deleteUser(email);
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadImage(File file) {
+    // TODO: implement uploadImage
+    throw UnimplementedError();
   }
 }

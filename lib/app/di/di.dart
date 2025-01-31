@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glownepal_mobile_app_5th_sem/core/network/api_service.dart';
 import 'package:glownepal_mobile_app_5th_sem/core/network/hive_service.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/local_datasource/user_login_local_datasource.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/user_login_data_source.dart';
@@ -11,6 +13,7 @@ import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentatio
 import 'package:glownepal_mobile_app_5th_sem/features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/splash/presentation/view_model/splash_cubit.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -19,6 +22,20 @@ Future<void> initDependencies() async {
   _initSplashDependencies();
   _initOnboardingDependencies();
   _initLoginDependencies();
+  initApiService();
+  initSharedPreferences();
+}
+
+Future<void> initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
+void initApiService() {
+  // Remote Data Source
+  getIt.registerLazySingleton<Dio>(
+    () => ApiService(Dio()).dio,
+  );
 }
 
 Future<void> _initHiveService() async {

@@ -1,78 +1,106 @@
 import 'package:flutter/material.dart';
-import 'package:glownepal_mobile_app_5th_sem/app/constants/theme_constant.dart';
+
+// Primary and Secondary Colour for Branding
+const Color primaryColor = Color(0xFF9B6763);
+const Color secondaryColor = Color(0xFFB8978C);
 
 class AppTheme {
   AppTheme._();
 
   static getApplicationTheme({required bool isDarkMode}) {
     return ThemeData(
-      // change the theme according to the user preference
-      colorScheme: isDarkMode
-          ? ColorScheme.dark(
-              primary: ThemeConstant.primaryColor,
-            )
-          : const ColorScheme.light(
-              primary: ThemeConstant.primaryColor,
-            ),
-      brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      fontFamily: 'Montserrat',
-      useMaterial3: true,
+      primaryColor: primaryColor,
+      secondaryHeaderColor: secondaryColor,
+      scaffoldBackgroundColor: Colors.grey[200],
+      fontFamily: 'Montserrat Regular',
 
-      // Change app bar color
+      // AppBar Theme
       appBarTheme: const AppBarTheme(
-        elevation: 0,
-        backgroundColor: ThemeConstant.appBarColor,
         centerTitle: true,
+        color: primaryColor,
+        elevation: 4,
+        shadowColor: Colors.black,
         titleTextStyle: TextStyle(
-          color: Colors.white,
           fontSize: 20,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
         ),
       ),
 
-      // Change elevated button theme
+      // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          elevation: 0,
           foregroundColor: Colors.white,
-          backgroundColor: ThemeConstant.primaryColor,
           textStyle: const TextStyle(
-            fontSize: 20,
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Montserrat-Regular',
           ),
+          backgroundColor: primaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
           ),
         ),
       ),
 
-      // Change text field theme
-      inputDecorationTheme: const InputDecorationTheme(
-        contentPadding: EdgeInsets.all(15),
-        border: OutlineInputBorder(),
-        labelStyle: TextStyle(
-          fontSize: 20,
+      // Input Decoration Theme for TextFields
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.grey[400]!),
         ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.red,
-          ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: primaryColor),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: ThemeConstant.primaryColor,
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: primaryColor, width: 2.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+        hintStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.grey[600],
+        ),
+        labelStyle: const TextStyle(
+          color: primaryColor,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+
+      // Text Button Theme
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: secondaryColor,
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
-      // Circular progress bar theme
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: ThemeConstant.primaryColor,
-      ),
-      //Bottom navigation bar theme
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.lightGreen,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
+
+      // Checkbox Theme
+      checkboxTheme: CheckboxThemeData(
+        checkColor: WidgetStateProperty.all(primaryColor),
+        // Color of the checkmark
+        fillColor: WidgetStateProperty.all(Colors.white),
+        // Color of the checkbox
+        side: WidgetStateBorderSide.resolveWith((states) {
+          return BorderSide(
+            color: primaryColor, // Border color of the checkbox
+            width: 2,
+          );
+        }),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:glownepal_mobile_app_5th_sem/core/error/failure.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../core/error/failure.dart';
 
 class TokenSharedPrefs {
   final SharedPreferences _sharedPreferences;
@@ -20,15 +21,6 @@ class TokenSharedPrefs {
     try {
       final token = _sharedPreferences.getString('token');
       return Right(token ?? '');
-    } catch (e) {
-      return Left(SharedPrefsFailure(message: e.toString()));
-    }
-  }
-
-  Future<Either<Failure, void>> removeToken() async {
-    try {
-      await _sharedPreferences.remove('token');
-      return Right(null);
     } catch (e) {
       return Left(SharedPrefsFailure(message: e.toString()));
     }

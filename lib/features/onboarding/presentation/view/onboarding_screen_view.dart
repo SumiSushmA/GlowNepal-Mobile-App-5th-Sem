@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/app/di/di.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/login/login_bloc.dart';
 
 import '../view_model/onboarding_cubit.dart';
 
@@ -29,7 +31,8 @@ class OnboardingScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OnboardingCubit(),
+      create: (_) =>
+          OnboardingCubit(getIt<LoginBloc>()), // ✅ Fix: Inject UserLoginBloc
       child: BlocBuilder<OnboardingCubit, OnboardingState>(
         builder: (context, state) {
           final cubit = context.read<OnboardingCubit>();

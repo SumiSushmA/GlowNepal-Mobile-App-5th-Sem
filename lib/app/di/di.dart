@@ -1,100 +1,135 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glownepal_mobile_app_5th_sem/app/shared_prefs/token_shared_prefs.dart';
 import 'package:glownepal_mobile_app_5th_sem/core/network/api_service.dart';
 import 'package:glownepal_mobile_app_5th_sem/core/network/hive_service.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/local_datasource/user_login_local_datasource.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/data_source/user_login_data_source.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_login_hive_model.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_signup_hive_model.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/repository/user_login_data_repository.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/repository/user_login_domain_repository.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/domain/use_case/login/user_login_usecases.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view_model/login/user_login_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/data/data_source/local_data_source/auth_local_datasource.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/data/data_source/remote_data_source/auth_remote_datasource.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/data/repository/auth_remote_repository/auth_remote_repository.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/use_case/login_usecase.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/use_case/register_user_usecase.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/use_case/upload_image_usecase.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_model/home_cubit.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/splash/presentation/view_model/splash_cubit.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
+  // Sequence of Dependencies Matter!!
+
   await _initHiveService();
-  _initSplashDependencies();
-  _initOnboardingDependencies();
-  _initLoginDependencies();
-  initApiService();
-  initSharedPreferences();
+  await _initApiService();
+  await _initSharedPreferences();
+
+  // Initialize Home and Register dependencies before LoginBloc
+  await _initHomeDependencies();
+  await _initRegisterDependencies();
+  await _initLoginDependencies();
+
+  // Initialize other dependencies
+  await _initSplashScreenDependencies();
+  await _initOnboardingScreenDependencies();
 }
 
-Future<void> initSharedPreferences() async {
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+_initHiveService() {
+  getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
 
-void initApiService() {
+_initApiService() {
   // Remote Data Source
   getIt.registerLazySingleton<Dio>(
     () => ApiService(Dio()).dio,
   );
 }
 
-Future<void> _initHiveService() async {
-  await Hive.initFlutter();
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
 
-  // Register Hive Adapters
-  if (!Hive.isAdapterRegistered(0)) {
-    Hive.registerAdapter(UserLoginHiveModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(1)) {
-    Hive.registerAdapter(UserSignupHiveModelAdapter());
-  }
+_initHomeDependencies() async {
+  getIt.registerSingleton<HomeCubit>(
+    HomeCubit(),
+  );
+}
 
-  // Open Hive Boxes
-  final userLoginBox = await Hive.openBox<UserLoginHiveModel>('userLoginBox');
-  final userSignupBox =
-      await Hive.openBox<UserSignupHiveModel>('userSignupBox');
+_initRegisterDependencies() {
+// =========================== Data Source ===========================
 
-  // Register HiveService with opened boxes
-  getIt.registerLazySingleton<HiveService>(
-    () => HiveService(
-      userLoginBox: userLoginBox,
-      userSignupBox: userSignupBox,
+  getIt.registerLazySingleton<AuthLocalDataSource>(
+    () => AuthLocalDataSource(getIt<HiveService>()),
+  );
+
+  getIt.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSource(getIt<Dio>()),
+  );
+
+  // =========================== Repository ===========================
+
+  getIt.registerLazySingleton(
+    () => AuthLocalRepository(getIt<AuthLocalDataSource>()),
+  );
+  getIt.registerLazySingleton<AuthRemoteRepository>(
+    () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()),
+  );
+
+  // =========================== Usecases ===========================
+  getIt.registerLazySingleton<RegisterUseCase>(
+    () => RegisterUseCase(
+      getIt<AuthRemoteRepository>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<UploadImageUsecase>(
+    () => UploadImageUsecase(
+      getIt<AuthRemoteRepository>(),
+    ),
+  );
+
+  getIt.registerFactory<RegisterBloc>(
+    () => RegisterBloc(
+      registerUseCase: getIt(),
+      uploadImageUsecase: getIt(),
     ),
   );
 }
 
-void _initSplashDependencies() {
-  getIt.registerFactory<SplashCubit>(() => SplashCubit());
+_initLoginDependencies() async {
+  // =========================== Token Shared Preferences ===========================
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
+  // =========================== Usecases ===========================
+  getIt.registerLazySingleton<LoginUseCase>(
+    () => LoginUseCase(
+      getIt<AuthRemoteRepository>(),
+      getIt<TokenSharedPrefs>(),
+    ),
+  );
+
+  getIt.registerFactory<LoginBloc>(
+    () => LoginBloc(
+      registerBloc: getIt<RegisterBloc>(),
+      homeCubit: getIt<HomeCubit>(),
+      loginUseCase: getIt<LoginUseCase>(),
+    ),
+  );
 }
 
-void _initOnboardingDependencies() {
-  getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
+_initSplashScreenDependencies() async {
+  getIt.registerFactory<SplashCubit>(
+    () => SplashCubit(),
+  );
 }
 
-void _initLoginDependencies() {
-  // Data Source
-  getIt.registerFactory<IUserLoginDataSource>(
-      () => UserLoginLocalDatasource(getIt<HiveService>()));
-
-  // Repository
-  getIt.registerLazySingleton<UserLoginDomainRepository>(
-      () => UserLoginDataRepositoryImpl(getIt<IUserLoginDataSource>()));
-
-  // Use Cases
-  getIt.registerLazySingleton<LoginUserUseCase>(
-      () => LoginUserUseCase(getIt<UserLoginDomainRepository>()));
-  getIt.registerLazySingleton<SaveUserUseCase>(
-      () => SaveUserUseCase(getIt<UserLoginDomainRepository>()));
-  getIt.registerLazySingleton<DeleteUserUseCase>(
-      () => DeleteUserUseCase(getIt<UserLoginDomainRepository>()));
-  getIt.registerLazySingleton<GetAllUsersUseCase>(
-      () => GetAllUsersUseCase(getIt<UserLoginDomainRepository>()));
-
-  // Bloc
-  getIt.registerFactory<UserLoginBloc>(() => UserLoginBloc(
-        saveUserUseCase: getIt<SaveUserUseCase>(),
-        loginUserUseCase: getIt<LoginUserUseCase>(),
-        deleteUserUseCase: getIt<DeleteUserUseCase>(),
-        getAllUsersUseCase: getIt<GetAllUsersUseCase>(),
-      ));
+_initOnboardingScreenDependencies() async {
+  getIt.registerFactory<OnboardingCubit>(
+    () => OnboardingCubit(getIt<LoginBloc>()),
+  );
 }

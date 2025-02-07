@@ -13,6 +13,7 @@ class ApiEndpoints {
   static const String getUserProfile = "user/profile";
   static const String updateUserProfile = "user/updateProfile";
   static const String deleteUser = "user/delete";
+  static const String getAllUsers = "user/getAllUsers/";
 
   // ============= Image Upload Routes =============
   static const String imageUrl = "http://10.0.2.2:4000/public/uploads/";

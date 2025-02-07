@@ -1,55 +1,47 @@
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_login_hive_model.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/data/model/user_signup_hive_model.dart';
+import 'package:glownepal_mobile_app_5th_sem/app/constants/hive_table_constant.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/data/model/auth_hive_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HiveService {
-  final Box<UserLoginHiveModel> userLoginBox;
-  final Box<UserSignupHiveModel> userSignupBox;
+  Future<void> init() async {
+    //Initialize the Database
+    var directory = await getApplicationDocumentsDirectory();
+    var path = '${directory.path}.glow_nepal.db';
 
-  HiveService({
-    required this.userLoginBox,
-    required this.userSignupBox,
-  });
+    //Create Database
+    Hive.init(path);
 
-  // For Login Users
-  Future<void> addLoginUser(UserLoginHiveModel user) async {
-    await userLoginBox.put(user.email, user);
+    //Register Adapters
+
+    Hive.registerAdapter(AuthHiveModelAdapter());
   }
 
-  Future<void> deleteLoginUser(String email) async {
-    await userLoginBox.delete(email);
+// User Queries
+
+  Future<void> addUser(AuthHiveModel user) async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
+    await box.put(user.studentId, user);
   }
 
-  Future<UserLoginHiveModel?> loginUser(String email, String password) async {
-    final user = userLoginBox.get(email);
-    if (user != null && user.password == password) {
-      return user;
-    }
-    return null;
+  Future<void> deleteUser(String id) async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
+    await box.delete(id);
   }
 
-  Future<List<UserLoginHiveModel>> getAllLoginUsers() async {
-    return userLoginBox.values.toList();
+  Future<List<AuthHiveModel>> getAllUsers() async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
+    var users = box.values.toList();
+    return users;
   }
 
-  // For Signup Users
-  Future<void> addSignupUser(UserSignupHiveModel user) async {
-    await userSignupBox.put(user.email, user);
-  }
+  Future<AuthHiveModel?> loginUser(String email, String password) async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
 
-  Future<UserSignupHiveModel?> getSignupUser(String email) async {
-    return userSignupBox.get(email);
-  }
+    var auth = box.values.firstWhere(
+        (element) => element.email == email && element.password == password,
+        orElse: () => AuthHiveModel.initial());
 
-  Future<void> deleteSignupUser(String email) async {
-    await userSignupBox.delete(email);
-  }
-
-  Future<List<UserSignupHiveModel>> getAllSignupUsers() async {
-    return userSignupBox.values.toList();
-  }
-
-  Future<bool> isEmailRegistered(String email) async {
-    return userSignupBox.containsKey(email);
+    return auth;
   }
 }

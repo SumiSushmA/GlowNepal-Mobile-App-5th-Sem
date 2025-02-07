@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glownepal_mobile_app_5th_sem/app/di/di.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view/login/user_login_screen_view.dart';
-import 'package:glownepal_mobile_app_5th_sem/features/authentication/presentation/view_model/login/user_login_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view/login_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/login/login_bloc.dart';
 
 part 'onboarding_state.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {
-  OnboardingCubit()
+  OnboardingCubit(LoginBloc userLoginBloc)
       : super(
           OnboardingState(
             currentIndex: 0,
@@ -42,8 +42,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       context,
       MaterialPageRoute(
         builder: (_) => BlocProvider(
-          create: (_) => getIt<UserLoginBloc>(), // Provide UserLoginBloc
-          child: const UserLoginScreenView(),
+          create: (_) => getIt<LoginBloc>(), // ✅ Fix: Provide UserLoginBloc
+          child: LoginView(),
         ),
       ),
     );

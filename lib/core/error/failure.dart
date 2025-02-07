@@ -1,13 +1,49 @@
+// abstract class Failure {
+//   final String message;
+//   final int? statusCode;
+
+//   Failure({
+//     required this.message,
+//     this.statusCode,
+//   });
+
+//   @override
+//   String toString() => 'Failure(message: $message, statusCode: $statusCode)';
+// }
+
+// class LocalDatabaseFailure extends Failure {
+//   LocalDatabaseFailure({
+//     required super.message,
+//   });
+// }
+
+// class ApiFailure extends Failure {
+//   @override
+//   final int? statusCode;
+
+//   ApiFailure({
+//     this.statusCode,
+//     required super.message,
+//   });
+// }
+
+// class SharedPrefsFailure extends Failure {
+//   SharedPrefsFailure({
+//     required super.message,
+//   });
+// }
+
 abstract class Failure {
   final String message;
   final int? statusCode;
+
   Failure({
     required this.message,
     this.statusCode,
   });
 
   @override
-  String toString() => 'Failure(message: \$message, statusCode: \$statusCode)';
+  String toString() => 'Failure(message: $message, statusCode: $statusCode)';
 }
 
 class LocalDatabaseFailure extends Failure {
@@ -18,16 +54,23 @@ class LocalDatabaseFailure extends Failure {
 
 class ApiFailure extends Failure {
   @override
-  final int statusCode;
+  final int? statusCode;
 
   ApiFailure({
-    required this.statusCode,
+    this.statusCode,
     required super.message,
   });
 }
 
 class SharedPrefsFailure extends Failure {
   SharedPrefsFailure({
+    required super.message,
+  });
+}
+
+class ServerFailure extends Failure {
+  ServerFailure({
+    super.statusCode,
     required super.message,
   });
 }

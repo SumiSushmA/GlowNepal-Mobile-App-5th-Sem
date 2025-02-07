@@ -1,33 +1,27 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final String labelText;
-  final TextEditingController controller;
-  final bool obscureText;
-
   const CustomTextFormField({
     super.key,
-    required this.labelText,
+    required this.onPressed,
+    required this.text,
     required this.controller,
-    this.obscureText = false,
   });
+
+  final void Function() onPressed;
+  final String text;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      obscureText: obscureText,
       decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        filled: true,
-        fillColor: Colors.white,
+        labelText: text,
       ),
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter $labelText';
+        if (value!.isEmpty) {
+          return 'Please enter $text';
         }
         return null;
       },

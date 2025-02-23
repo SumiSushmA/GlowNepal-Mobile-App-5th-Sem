@@ -6,21 +6,21 @@ import 'package:glownepal_mobile_app_5th_sem/core/error/failure.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/repository/auth_repository.dart';
 
 class LoginParams extends Equatable {
-  final String username;
+  final String email;
   final String password;
 
   const LoginParams({
-    required this.username,
+    required this.email,
     required this.password,
   });
 
   // Initial Constructor
   const LoginParams.initial()
-      : username = '',
+      : email = '',
         password = '';
 
   @override
-  List<Object> get props => [username, password];
+  List<Object> get props => [email, password];
 }
 
 class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
@@ -32,9 +32,7 @@ class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
   @override
   Future<Either<Failure, String>> call(LoginParams params) {
     // Save token in Shared Preferences
-    return repository
-        .loginStudent(params.username, params.password)
-        .then((value) {
+    return repository.loginStudent(params.email, params.password).then((value) {
       return value.fold(
         (failure) => Left(failure),
         (token) {

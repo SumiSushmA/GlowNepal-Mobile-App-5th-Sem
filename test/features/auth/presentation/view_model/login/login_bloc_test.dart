@@ -98,7 +98,7 @@ void main() {
 
     // Act: Dispatch LoginStudentEvent
     loginBloc.add(LoginStudentEvent(
-      username: "testUser",
+      email: "testUser@email.com",
       password: "testPass",
       context: MockBuildContext(),
     ));

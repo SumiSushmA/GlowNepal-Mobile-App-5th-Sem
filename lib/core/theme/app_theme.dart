@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 // Primary and Secondary Colour for Branding
-const Color primaryColor = Color(0xFF9B6763);
-const Color secondaryColor = Color(0xFFB8978C);
+const Color primaryColor = Color(0xFFBB86FC);
+const Color secondaryColor = Color(0xFF6200EE);
 
 class AppTheme {
   AppTheme._();

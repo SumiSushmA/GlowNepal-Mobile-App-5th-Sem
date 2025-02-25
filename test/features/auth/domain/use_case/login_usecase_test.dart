@@ -38,7 +38,7 @@ void main() {
       (_) async => Right(null),
     );
     final result = await useCase(LoginParams(
-      username: 'sushma',
+      email: 'sushma@email.com',
       password: 'sushma123',
     ));
     expect(result, const Right('token'));

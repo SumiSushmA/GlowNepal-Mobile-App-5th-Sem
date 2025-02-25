@@ -112,15 +112,22 @@ _initLoginDependencies() async {
       getIt<TokenSharedPrefs>(),
     ),
   );
-
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
-      homeCubit: getIt<HomeCubit>(),
       loginUseCase: getIt<LoginUseCase>(),
     ),
   );
 }
+
+//   getIt.registerFactory<LoginBloc>(
+//     () => LoginBloc(
+//       registerBloc: getIt<RegisterBloc>(),
+//       homeCubit: getIt<HomeCubit>(),
+//       loginUseCase: getIt<LoginUseCase>(),
+//     ),
+//   );
+// }
 
 _initSplashScreenDependencies() async {
   getIt.registerFactory<SplashCubit>(

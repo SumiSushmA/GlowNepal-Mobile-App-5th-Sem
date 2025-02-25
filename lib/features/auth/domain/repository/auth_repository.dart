@@ -7,8 +7,7 @@ import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/entity/auth_en
 abstract interface class IAuthRepository {
   Future<Either<Failure, void>> registerStudent(AuthEntity student);
 
-  Future<Either<Failure, String>> loginStudent(
-      String username, String password);
+  Future<Either<Failure, String>> loginStudent(String email, String password);
 
   Future<Either<Failure, String>> uploadProfilePicture(File file);
 

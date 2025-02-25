@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:glownepal_mobile_app_5th_sem/app/constants/hive_table_constant.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/entity/auth_entity.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'auth_hive_model.g.dart';

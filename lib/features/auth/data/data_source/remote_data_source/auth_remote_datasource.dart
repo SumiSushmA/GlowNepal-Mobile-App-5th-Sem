@@ -28,7 +28,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return;
       } else {
         throw Exception(response.statusMessage);
@@ -46,16 +46,17 @@ class AuthRemoteDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<String> loginStudent(String username, String password) async {
+  Future<String> loginStudent(String email, String password) async {
     try {
       Response response = await _dio.post(
         ApiEndpoints.userLogin,
         data: {
-          "username": username,
+          "email": email,
           "password": password,
         },
       );
 
+      print("Response:::: $response");
       if (response.statusCode == 200) {
         final str = response.data['token'];
         return str;

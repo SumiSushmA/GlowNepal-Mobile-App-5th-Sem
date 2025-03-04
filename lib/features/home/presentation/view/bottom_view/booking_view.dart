@@ -235,6 +235,7 @@ import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_mod
 
 const Color primaryColor = Color(0xFFBB86FC);
 const Color secondaryColor = Color(0xFF6200EE);
+const Color backgroundColor = Color(0xFFF3E5F5); // Softer Background Color
 
 class BookingView extends StatelessWidget {
   const BookingView({super.key});
@@ -246,9 +247,11 @@ class BookingView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text("Booking Records"),
+            centerTitle: true,
             backgroundColor: primaryColor,
-            foregroundColor: Colors.white,
+            foregroundColor: Colors.black,
           ),
+          backgroundColor: backgroundColor, // Softer background
           body: state.bookings.isEmpty
               ? const Center(
                   child: Text(
@@ -261,41 +264,81 @@ class BookingView extends StatelessWidget {
                   itemCount: state.bookings.length,
                   itemBuilder: (context, index) {
                     final booking = state.bookings[index];
-                    return Card(
-                      color: primaryColor.withOpacity(0.2),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(booking["imageUrl"]),
-                        ),
-                        title: Text("Stylist: ${booking["stylist"]}"),
-                        subtitle: Text(
-                            "Date: ${booking["day"]}, ${booking["date"]} | Time: ${booking["time"]}"),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            /// Edit Button
-                            IconButton(
-                              icon: Icon(Icons.edit, color: secondaryColor),
-                              onPressed: () {
-                                _showEditDialog(context, index, booking);
-                              },
-                            ),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors
+                            .white, // Solid white background for better contrast
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          /// **Stylist Image**
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(booking["imageUrl"]),
+                            radius: 35,
+                          ),
+                          const SizedBox(width: 12),
 
-                            /// Delete Button
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                context.read<HomeCubit>().deleteBooking(index);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Appointment Deleted"),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              },
+                          /// **Text Details**
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Stylist: ${booking["stylist"]}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "Date: ${booking["day"]}, ${booking["date"]} | Time: ${booking["time"]}",
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.black54),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+
+                          /// **Edit & Delete Icons**
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit,
+                                    color: secondaryColor, size: 24),
+                                onPressed: () {
+                                  _showEditDialog(context, index, booking);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete,
+                                    color: Colors.red, size: 24),
+                                onPressed: () {
+                                  context
+                                      .read<HomeCubit>()
+                                      .deleteBooking(index);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Appointment Deleted"),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -319,6 +362,7 @@ class BookingView extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Edit Appointment"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -358,7 +402,7 @@ class BookingView extends StatelessWidget {
                 context.read<HomeCubit>().editBooking(index, updatedBooking);
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text("Appointment Updated"),
                     duration: Duration(seconds: 2),
                   ),

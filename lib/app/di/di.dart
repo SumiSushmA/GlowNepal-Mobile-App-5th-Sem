@@ -12,7 +12,10 @@ import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/use_case/regis
 import 'package:glownepal_mobile_app_5th_sem/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/data/data_source/stylist_remote_data_source.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/domain/repository/stylist_repository.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_model/home_cubit.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_model/stylist_cubit.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/splash/presentation/view_model/splash_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,47 +23,46 @@ import 'package:shared_preferences/shared_preferences.dart';
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
-  // Sequence of Dependencies Matter!!
+  // **ORDER MATTERS**: Correct sequence to avoid errors!
 
-  await _initHiveService();
-  await _initApiService();
+  _initHiveService();
+  _initApiService();
   await _initSharedPreferences();
+  _initTokenSharedPrefs();
 
-  // Initialize Home and Register dependencies before LoginBloc
-  await _initHomeDependencies();
-  await _initRegisterDependencies();
-  await _initLoginDependencies();
-
-  // Initialize other dependencies
-  await _initSplashScreenDependencies();
-  await _initOnboardingScreenDependencies();
+  // ✅ Feature-Specific Dependencies
+  _initAuthDependencies();
+  _initStylistDependencies();
+  _initHomeDependencies();
+  _initSplashScreenDependencies();
+  _initOnboardingScreenDependencies();
 }
 
-_initHiveService() {
+// ========================== Hive Service Initialization ==========================
+void _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
 
-_initApiService() {
-  // Remote Data Source
-  getIt.registerLazySingleton<Dio>(
-    () => ApiService(Dio()).dio,
-  );
+// ========================== API Service Initialization ==========================
+void _initApiService() {
+  getIt.registerLazySingleton<Dio>(() => ApiService(Dio()).dio);
 }
 
+// ========================== Shared Preferences Initialization ==========================
 Future<void> _initSharedPreferences() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 }
 
-_initHomeDependencies() async {
-  getIt.registerSingleton<HomeCubit>(
-    HomeCubit(),
+// ========================== Token Shared Preferences ==========================
+void _initTokenSharedPrefs() {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
   );
 }
 
-_initRegisterDependencies() {
-// =========================== Data Source ===========================
-
+// ========================== Authentication Dependencies ==========================
+void _initAuthDependencies() {
   getIt.registerLazySingleton<AuthLocalDataSource>(
     () => AuthLocalDataSource(getIt<HiveService>()),
   );
@@ -69,50 +71,36 @@ _initRegisterDependencies() {
     () => AuthRemoteDataSource(getIt<Dio>()),
   );
 
-  // =========================== Repository ===========================
-
-  getIt.registerLazySingleton(
+  getIt.registerLazySingleton<AuthLocalRepository>(
     () => AuthLocalRepository(getIt<AuthLocalDataSource>()),
   );
+
   getIt.registerLazySingleton<AuthRemoteRepository>(
     () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()),
   );
 
-  // =========================== Usecases ===========================
   getIt.registerLazySingleton<RegisterUseCase>(
-    () => RegisterUseCase(
-      getIt<AuthRemoteRepository>(),
-    ),
+    () => RegisterUseCase(getIt<AuthRemoteRepository>()),
   );
 
   getIt.registerLazySingleton<UploadImageUsecase>(
-    () => UploadImageUsecase(
-      getIt<AuthRemoteRepository>(),
-    ),
+    () => UploadImageUsecase(getIt<AuthRemoteRepository>()),
   );
 
-// yo chahi register ko image wala code ko lagi
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       registerUseCase: getIt(),
       uploadImageUsecase: getIt(),
     ),
   );
-}
 
-_initLoginDependencies() async {
-  // =========================== Token Shared Preferences ===========================
-  getIt.registerLazySingleton<TokenSharedPrefs>(
-    () => TokenSharedPrefs(getIt<SharedPreferences>()),
-  );
-
-  // =========================== Usecases ===========================
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
       getIt<AuthRemoteRepository>(),
       getIt<TokenSharedPrefs>(),
     ),
   );
+
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
@@ -121,22 +109,35 @@ _initLoginDependencies() async {
   );
 }
 
-//   getIt.registerFactory<LoginBloc>(
-//     () => LoginBloc(
-//       registerBloc: getIt<RegisterBloc>(),
-//       homeCubit: getIt<HomeCubit>(),
-//       loginUseCase: getIt<LoginUseCase>(),
-//     ),
-//   );
-// }
+// ========================== Stylist Dependencies (Fixed) ==========================
+void _initStylistDependencies() {
+  getIt.registerLazySingleton<StylistRemoteDataSource>(
+    () => StylistRemoteDataSource(),
+  );
 
-_initSplashScreenDependencies() async {
+  getIt.registerLazySingleton<StylistRepository>(
+    () => StylistRepositoryImpl(getIt<StylistRemoteDataSource>()),
+  );
+
+  getIt.registerFactory<StylistCubit>(
+    () => StylistCubit(getIt<StylistRepository>()),
+  );
+}
+
+// ========================== Home Dependencies ==========================
+void _initHomeDependencies() {
+  getIt.registerSingleton<HomeCubit>(HomeCubit());
+}
+
+// ========================== Splash Dependencies ==========================
+void _initSplashScreenDependencies() {
   getIt.registerFactory<SplashCubit>(
     () => SplashCubit(),
   );
 }
 
-_initOnboardingScreenDependencies() async {
+// ========================== Onboarding Dependencies ==========================
+void _initOnboardingScreenDependencies() {
   getIt.registerFactory<OnboardingCubit>(
     () => OnboardingCubit(getIt<LoginBloc>()),
   );

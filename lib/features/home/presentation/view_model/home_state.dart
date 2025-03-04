@@ -7,29 +7,44 @@ import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/hom
 
 class HomeState extends Equatable {
   final int selectedIndex;
-  final List<Widget> views;
+  final List<Map<String, dynamic>> bookings; // Stores booking records
+  final List<Widget> views; // List of views
 
-  const HomeState({required this.selectedIndex, required this.views});
+  const HomeState({
+    required this.selectedIndex,
+    required this.bookings,
+    required this.views,
+  });
 
+  /// **Initial State**
   factory HomeState.initial() {
     return HomeState(
       selectedIndex: 0,
+      bookings: [],
       views: [
         HomeView(),
-        const BookingView(),
+        const BookingView(), // Do not pass bookings explicitly
         const AboutView(),
         const ProfileView(),
       ],
     );
   }
 
-  HomeState copyWith({int? selectedIndex}) {
+  /// **Copy with updated values**
+  HomeState copyWith(
+      {int? selectedIndex, List<Map<String, dynamic>>? bookings}) {
     return HomeState(
       selectedIndex: selectedIndex ?? this.selectedIndex,
-      views: views,
+      bookings: bookings ?? this.bookings,
+      views: [
+        HomeView(),
+        const BookingView(), // Keep BookingView static
+        const AboutView(),
+        const ProfileView(),
+      ],
     );
   }
 
   @override
-  List<Object> get props => [selectedIndex, views];
+  List<Object> get props => [selectedIndex, bookings];
 }

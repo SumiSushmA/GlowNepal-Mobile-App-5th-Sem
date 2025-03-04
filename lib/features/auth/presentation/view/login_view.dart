@@ -33,7 +33,6 @@ class _LoginViewState extends State<LoginView> {
               if (state.isSuccess) {
                 Navigator.pushReplacement(
                   context,
-                  // MaterialPageRoute(builder: (context) => HomeView()),
                   MaterialPageRoute(builder: (context) => MainHomeView()),
                 );
               }

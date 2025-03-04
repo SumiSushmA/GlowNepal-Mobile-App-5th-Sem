@@ -1,36 +1,35 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/bottom_view/about_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/bottom_view/booking_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/bottom_view/profile_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/home_view.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
   final List<Widget> views;
 
-  const HomeState({
-    required this.selectedIndex,
-    required this.views,
-  });
+  const HomeState({required this.selectedIndex, required this.views});
 
-  // Initial state
-  static HomeState initial() {
+  factory HomeState.initial() {
     return HomeState(
       selectedIndex: 0,
       views: [
-        const Center(child: Text('Dashboard')),
-        const Center(child: Text('Account')),
+        HomeView(),
+        const BookingView(),
+        const AboutView(),
+        const ProfileView(),
       ],
     );
   }
 
-  HomeState copyWith({
-    int? selectedIndex,
-    List<Widget>? views,
-  }) {
+  HomeState copyWith({int? selectedIndex}) {
     return HomeState(
       selectedIndex: selectedIndex ?? this.selectedIndex,
-      views: views ?? this.views,
+      views: views,
     );
   }
 
   @override
-  List<Object?> get props => [selectedIndex, views];
+  List<Object> get props => [selectedIndex, views];
 }

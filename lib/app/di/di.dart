@@ -91,6 +91,7 @@ _initRegisterDependencies() {
     ),
   );
 
+// yo chahi register ko image wala code ko lagi
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       registerUseCase: getIt(),

@@ -40,3 +40,4 @@ class RegisterStudent extends RegisterEvent {
     this.role = 'user',
   });
 }
+

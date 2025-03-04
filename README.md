@@ -40,3 +40,8 @@ GlowNepal is an innovative solution for managing beauty and salon appointments w
 
 https://github.com/SumiSushmA/Glow_Nepal_Backend.git
 
+**Web Frontend**
+
+https://github.com/SumiSushmA/GlowNepal_Web.git
+
+

@@ -1,190 +1,151 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/app/di/di.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view/login_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_model/home_cubit.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_model/home_state.dart';
+import 'package:glownepal_mobile_app_5th_sem/sensor/shake_detector.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const Color primaryColor = Color(0xFFBB86FC);
 const Color secondaryColor = Color(0xFF6200EE);
-const Color backgroundColor = Color(0xFFF3E5F5); // Softer Background Color
+const Color backgroundColor = Color(0xFFF3E5F5);
 
 class BookingView extends StatelessWidget {
   const BookingView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text("Booking Records"),
-            centerTitle: true,
-            backgroundColor: primaryColor,
-            foregroundColor: Colors.black,
-          ),
-          backgroundColor: backgroundColor, // Softer background
-          body: state.bookings.isEmpty
-              ? const Center(
-                  child: Text(
-                    "No bookings yet.",
-                    style: TextStyle(fontSize: 18, color: secondaryColor),
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  itemCount: state.bookings.length,
-                  itemBuilder: (context, index) {
-                    final booking = state.bookings[index];
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors
-                            .white, // Solid white background for better contrast
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 6,
-                            offset: Offset(0, 3),
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          /// **Stylist Image**
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(booking["imageUrl"]),
-                            radius: 35,
-                          ),
-                          const SizedBox(width: 12),
-
-                          /// **Text Details**
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+    return ShakeDetector(
+      onShake: () => _confirmLogout(context),
+      child: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Booking Records"),
+              centerTitle: true,
+              backgroundColor: primaryColor,
+              foregroundColor: Colors.black,
+            ),
+            backgroundColor: backgroundColor,
+            body: state.bookings.isEmpty
+                ? const Center(
+                    child: Text(
+                      "No bookings yet.",
+                      style: TextStyle(fontSize: 18, color: secondaryColor),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    itemCount: state.bookings.length,
+                    itemBuilder: (context, index) {
+                      final booking = state.bookings[index];
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(booking["imageUrl"]),
+                              radius: 35,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Stylist: ${booking["stylist"]}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "Date: ${booking["day"]}, ${booking["date"]} | Time: ${booking["time"]}",
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
                               children: [
-                                Text(
-                                  "Stylist: ${booking["stylist"]}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.black),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "Date: ${booking["day"]}, ${booking["date"]} | Time: ${booking["time"]}",
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.black54),
+                                IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red, size: 24),
+                                  onPressed: () {
+                                    context
+                                        .read<HomeCubit>()
+                                        .deleteBooking(index);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Appointment Deleted"),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
-                          ),
-
-                          /// **Edit & Delete Icons**
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit,
-                                    color: secondaryColor, size: 24),
-                                onPressed: () {
-                                  _showEditDialog(context, index, booking);
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete,
-                                    color: Colors.red, size: 24),
-                                onPressed: () {
-                                  context
-                                      .read<HomeCubit>()
-                                      .deleteBooking(index);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Appointment Deleted"),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-        );
-      },
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+          );
+        },
+      ),
     );
   }
 
-  /// **Show Edit Dialog**
-  void _showEditDialog(
-      BuildContext context, int index, Map<String, dynamic> booking) {
-    TextEditingController stylistController =
-        TextEditingController(text: booking["stylist"]);
-    TextEditingController dateController =
-        TextEditingController(text: booking["date"]);
-    TextEditingController timeController =
-        TextEditingController(text: booking["time"]);
-
-    showDialog(
+  Future<void> _confirmLogout(BuildContext context) async {
+    if (!context.mounted) return;
+    final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: const Text("Edit Appointment"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: stylistController,
-                decoration: const InputDecoration(labelText: "Stylist Name"),
-              ),
-              TextField(
-                controller: dateController,
-                decoration: const InputDecoration(labelText: "Date"),
-              ),
-              TextField(
-                controller: timeController,
-                decoration: const InputDecoration(labelText: "Time"),
-              ),
-            ],
+      builder: (dialogContext) => AlertDialog(
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to logout?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text("No"),
           ),
-          actions: [
-            /// Cancel Button
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext, true);
+              final sharedPrefs = await SharedPreferences.getInstance();
+              await sharedPrefs.remove('token');
 
-            /// Save Button
-            TextButton(
-              onPressed: () {
-                final updatedBooking = {
-                  "stylist": stylistController.text,
-                  "date": dateController.text,
-                  "day": booking["day"], // Keep the day unchanged
-                  "time": timeController.text,
-                  "imageUrl": booking["imageUrl"], // Keep image URL
-                };
-
-                context.read<HomeCubit>().editBooking(index, updatedBooking);
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Appointment Updated"),
-                    duration: Duration(seconds: 2),
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => getIt<LoginBloc>(),
+                    child: LoginView(),
                   ),
-                );
-
-                Navigator.pop(context);
-              },
-              child: const Text("Save"),
-            ),
-          ],
-        );
-      },
+                ),
+              );
+            },
+            child: const Text("Yes", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
     );
   }
 }

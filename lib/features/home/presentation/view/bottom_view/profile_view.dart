@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glownepal_mobile_app_5th_sem/app/di/di.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view/login_view.dart';
+import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/Contact_Us_View.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view/Edit_Profile_View.dart';
 import 'package:glownepal_mobile_app_5th_sem/features/home/presentation/view_model/theme_cubit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const Color primaryColor = Color(0xFFBB86FC);
 const Color secondaryColor = Color(0xFF6200EE);
@@ -38,8 +41,10 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
-  void _logout() {
-    showDialog(
+  Future<void> _logout() async {
+    if (!context.mounted) return;
+
+    final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Logout"),
@@ -50,10 +55,20 @@ class _ProfileViewState extends State<ProfileView> {
             child: const Text("Cancel"),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
+            onPressed: () async {
+              Navigator.pop(context); // Close dialog
+
+              final sharedPrefs = await SharedPreferences.getInstance();
+              await sharedPrefs.remove('token'); // Remove user session
+
+              // ✅ Wrap LoginView with BlocProvider<LoginBloc>
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => LoginView()),
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => getIt<LoginBloc>(),
+                    child: LoginView(),
+                  ),
+                ),
                 (route) => false, // Clears navigation stack
               );
             },
@@ -62,6 +77,10 @@ class _ProfileViewState extends State<ProfileView> {
         ],
       ),
     );
+
+    if (shouldLogout == true) {
+      print("User logged out successfully!");
+    }
   }
 
   void _editProfile() {

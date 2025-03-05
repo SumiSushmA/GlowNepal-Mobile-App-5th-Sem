@@ -24,7 +24,7 @@ class ApiEndpoints {
   static const String cancelAppointment = "user/cancel-appointment";
 
   // ============= Image Upload Routes =============
-  static const String imageUrl = "http://10.12.34.77:4000/public/uploads/";
+  static const String imageUrl = "http://192.168.1.68:4000/public/uploads/";
 
   static const String uploadImage = "user/uploadImage";
 }

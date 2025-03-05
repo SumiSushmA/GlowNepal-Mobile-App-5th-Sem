@@ -1,0 +1,2 @@
+D:/glownepal_mobile_app_5th_sem/android/app/.cxx/RelWithDebInfo/5z6a386i/x86/CMakeFiles/edit_cache.dir
+D:/glownepal_mobile_app_5th_sem/android/app/.cxx/RelWithDebInfo/5z6a386i/x86/CMakeFiles/rebuild_cache.dir

@@ -3,7 +3,8 @@ import 'package:dio/dio.dart';
 import '../model/stylist_model.dart';
 
 class StylistRemoteDataSource {
-  final Dio _dio = Dio(BaseOptions(baseUrl: "http://10.0.2.2:4000/api/admin/"));
+  final Dio _dio =
+      Dio(BaseOptions(baseUrl: "http://192.168.1.68:4000/api/admin/"));
 
   Future<List<StylistModel>> fetchStylists() async {
     try {

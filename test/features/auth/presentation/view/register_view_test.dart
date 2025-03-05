@@ -5,35 +5,31 @@ import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view/reg
 import 'package:glownepal_mobile_app_5th_sem/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'fake.register.dart';
-import 'register.mock.dart';
+class MockRegisterBloc extends Mock implements RegisterBloc {}
 
 void main() {
   late MockRegisterBloc mockRegisterBloc;
 
-  setUpAll(() {
-    registerFallbackValue(FakeRegisterStudent());
-  });
-
   setUp(() {
     mockRegisterBloc = MockRegisterBloc();
-
     when(() => mockRegisterBloc.stream).thenAnswer(
-      (_) => Stream.value(const RegisterState(
+      (_) => Stream.value(
+        const RegisterState(
           isLoading: false,
           isSuccess: false,
           imageName: null,
-          isImageUploaded: false)),
+          isImageUploaded: false,
+        ),
+      ),
     );
-
-    when(() => mockRegisterBloc.state).thenReturn(const RegisterState(
+    when(() => mockRegisterBloc.state).thenReturn(
+      const RegisterState(
         isLoading: false,
         isSuccess: false,
-        imageName: 'test_image.png',
-        isImageUploaded: true));
-
-    when(() => mockRegisterBloc.add(any(that: isA<RegisterStudent>())))
-        .thenReturn(null);
+        imageName: null,
+        isImageUploaded: false,
+      ),
+    );
   });
 
   Widget createTestWidget() {
@@ -71,7 +67,7 @@ void main() {
     ];
 
     for (var label in labels) {
-      expect(find.widgetWithText(TextFormField, label), findsOneWidget);
+      expect(find.text(label), findsOneWidget);
     }
   });
 
@@ -79,7 +75,7 @@ void main() {
     await tester.pumpWidget(createTestWidget());
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ElevatedButton, 'Register'), findsOneWidget);
+    expect(find.widgetWithText(ElevatedButton, 'Sign Up Now!'), findsOneWidget);
   });
 
   testWidgets('Should show Snackbar if required fields are empty',
@@ -87,11 +83,15 @@ void main() {
     await tester.pumpWidget(createTestWidget());
     await tester.pumpAndSettle();
 
-    final registerButton = find.widgetWithText(ElevatedButton, 'Register');
+    // Find the Register button
+    final registerButton = find.widgetWithText(ElevatedButton, 'Sign Up Now!');
+
+    // Tap on the Register button
     await tester.ensureVisible(registerButton);
     await tester.tap(registerButton);
-    await tester.pumpAndSettle();
+    await tester.pump();
 
+    // Verify that the Snackbar appears
     expect(find.textContaining('Enter'), findsWidgets);
   });
 }

@@ -19,7 +19,7 @@ class StylistModelAdapter extends TypeAdapter<StylistModel> {
     return StylistModel(
       id: fields[0] as String,
       name: fields[1] as String,
-      category: fields[2] as String,
+      speciality: fields[2] as String,
       image: fields[3] as String,
       experience: fields[4] as String,
       bookingFee: fields[5] as double,
@@ -37,7 +37,7 @@ class StylistModelAdapter extends TypeAdapter<StylistModel> {
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.category)
+      ..write(obj.speciality)
       ..writeByte(3)
       ..write(obj.image)
       ..writeByte(4)

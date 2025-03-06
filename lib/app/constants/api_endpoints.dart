@@ -5,8 +5,8 @@ class ApiEndpoints {
   static const Duration receiveTimeout = Duration(seconds: 5000);
 
   // Base URL - Change according to your platform
-  // static const String baseUrl = "http://10.0.2.2:4000/api/";
   static const String baseUrl = "http://192.168.1.68:4000/api/";
+  // static const String baseUrl = "http://10.1.13.190:4000/api/";
 
   // ============= Authentication Routes =============
   static const String userLogin = "user/login";
@@ -24,6 +24,7 @@ class ApiEndpoints {
   static const String cancelAppointment = "user/cancel-appointment";
 
   // ============= Image Upload Routes =============
+  // static const String imageUrl = "http://10.1.13.190:4000/public/uploads/";
   static const String imageUrl = "http://192.168.1.68:4000/public/uploads/";
 
   static const String uploadImage = "user/uploadImage";

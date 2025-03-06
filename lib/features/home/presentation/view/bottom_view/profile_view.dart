@@ -23,10 +23,10 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final _nameController = TextEditingController(text: 'Sushma');
-  final _phoneController = TextEditingController(text: '+977 9999999999');
+  final _phoneController = TextEditingController(text: '+977 12345657890');
   final _usernameController = TextEditingController(text: 'sushma');
-  final _passwordController = TextEditingController(text: 'sushma123');
-  final _emailController = TextEditingController(text: 'sushma@email.com');
+  final _passwordController = TextEditingController(text: 'asdfghjkl');
+  final _emailController = TextEditingController(text: 'psp@emaillll.com');
   final _addressController = TextEditingController(text: 'KTM');
   final _dobController = TextEditingController(text: '2004-09-08');
   final String _selectedGender = 'Female';

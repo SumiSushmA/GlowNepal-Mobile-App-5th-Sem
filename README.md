@@ -35,6 +35,7 @@ GlowNepal is an innovative solution for managing beauty and salon appointments w
 3. Sprint 3: https://www.youtube.com/watch?v=yfbOCynxpr4
 4. Sprint 4: https://youtu.be/GriQZxyP3HI
 5. Sprint 5: https://youtu.be/BJtRJu2MiTU?si=f2D_ngcZWJRH_Sqj
+6. Final Video: https://youtu.be/B4bB64P0Qxw?si=Hq7ZOq5UTSLTcnPq
 
 **Backend**
 
